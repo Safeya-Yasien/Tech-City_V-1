@@ -1,0 +1,57 @@
+/* products */
+.product {
+  margin-top: 250px;
+  padding-bottom: 80px;
+}
+
+.product .card-body {
+  padding: 2.5rem;
+}
+
+.product .card .product-info {
+  display: flex;
+  align-items: center;
+  background-color: #eeeeee;
+}
+
+.product .card-title {
+  font-size: 25px;
+  margin-bottom: 0;
+}
+
+.product .reviews {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+
+}
+
+
+.product .reviews .icons {
+  display: flex;
+}
+
+.product .reviews i {
+  font-size: 12px;
+}
+
+.product .reviews span {
+  margin-left: 8px;
+}
+
+.product .btn {
+  font-weight: bold;
+  position: relative;
+  background-color: var(--main-color);
+  color: var(--white-color);
+}
+
+.product .card-text {
+  margin: 1rem 0;
+}
+
+.product .card-text.price {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 1rem 0;
+}
