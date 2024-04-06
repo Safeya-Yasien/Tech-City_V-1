@@ -7,7 +7,7 @@ const productTitle = document.querySelector("#product-title"),
   uploadImgButton = document.querySelector("#file"),
   uploadedImgContainer = document.querySelector(".uploaded-img");
 let products;
-
+let mood = "create";
 publishProductButton.addEventListener("click", addProduct);
 discardProductButton.addEventListener("click", clearData);
 uploadImgButton.addEventListener("change", uploadImg);
@@ -51,8 +51,10 @@ function addProduct() {
     productCategory.value !== "" &&
     imgSrc
   ) {
+    publishProductButton.innerHTML = "Publish Product";
     products.push(newProduct);
-    displaySuccessMessage();
+    displaySuccessMessage("Product Added Successfully");
+
     clearData();
   }
 
@@ -74,8 +76,6 @@ function clearData() {
     uploadedImgContainer.removeChild(deleteButton);
   }
 }
-
-checkProductInLocalStorage();
 
 // upload img
 function uploadImg(event) {
@@ -110,10 +110,14 @@ function uploadImg(event) {
   }
 }
 
-function displaySuccessMessage() {
+function displaySuccessMessage(message) {
+  const successMessageCotainer = document.querySelector(
+    ".success-message-container"
+  );
   const successMessage = document.querySelector(".success-message");
   const productsPageLink = document.querySelector(".see-products");
-  successMessage.style.display = "block";
+  successMessage.innerHTML = message;
+  successMessageCotainer.style.display = "block";
 
   productsPageLink.addEventListener("click", redirectToProductsPage);
 }
@@ -130,3 +134,5 @@ function redirectToProductsPage() {
 
   location.reload();
 }
+
+checkProductInLocalStorage();

@@ -2,22 +2,18 @@ const productsAddProductButton = document.querySelector(
   "#products-add-product"
 );
 const AllTabs = document.querySelectorAll(".tab");
+let temp;
 
 productsAddProductButton.addEventListener("click", displayAddProductFrom);
 
-fetchData()
-  .then((apiData) => {
-    const localStorageData = JSON.parse(localStorage.getItem("products")) || [];
+async function fetchProducts() {
+  const response = await fetch(api);
+  const apiData = await response.json();
 
-    const mergedData = localStorageData.concat(apiData);
-
-    localStorage.setItem("products", JSON.stringify(mergedData));
-
-    displayProducts(mergedData);
-  })
-  .catch((error) => {
-    console.error("Error fetching data:", error);
-  });
+  const localStorageData = JSON.parse(localStorage.getItem("product")) || [];
+  const mergedData = localStorageData.concat(apiData);
+  displayProducts(mergedData);
+}
 
 function displayProducts(apiData) {
   const tbody = document.querySelector("#tab-2 .products-table table tbody");
@@ -55,9 +51,7 @@ function displayProducts(apiData) {
         </a>
         <ul class="ellipsis-menu submenu">
         <li>
-        <a href="#" onclick='displayAddProductFrom(${JSON.stringify(
-          apiData[i]
-        )})'>update</a>
+        <a href="#" onclick='updateProduct(${i})'>update</a>
         </li>
         <li>
             <a href="#" onclick='removeProduct(${i})'>remove</a>
@@ -82,6 +76,7 @@ function displayProducts(apiData) {
 }
 
 function removeProduct(index) {
+  event.preventDefault();
   const localStorageData = JSON.parse(localStorage.getItem("product")) || [];
 
   localStorageData.splice(index, 1);
@@ -91,27 +86,65 @@ function removeProduct(index) {
   fetchProducts();
 }
 
-function displayAddProductFrom(product) {
-  AllTabs.forEach((tab) => {
-    tab.classList.remove("active");
-  });
+function updateProduct(index) {
+  temp = index;
+  mood = "update";
+  publishProductButton.innerHTML = "Update Product";
 
-  const successMessage = document.querySelector(".success-message");
-  successMessage.style.display = "none";
+  removeSuccessMess();
+  removeActiveTab();
 
   $("#tab-3").addClass("active").hide().fadeIn(1000);
 
-  productTitle.value = product.title;
-  productDescription.value = product.description;
-  productCategory.value = product.category;
-  productPrice.value = product.price;
+  productTitle.value = products[index].title;
+  productDescription.value = products[index].description;
+  productCategory.value = products[index].category;
+  productPrice.value = products[index].price;
 
-  if (product.image) {
+  if (products[index].image) {
     const imgElement = document.createElement("img");
-    imgElement.src = product.image;
+    imgElement.src = products[index].image;
     imgElement.alt = "product";
 
     uploadedImgContainer.innerHTML = "";
     uploadedImgContainer.appendChild(imgElement);
+
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "btn";
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", function () {
+      uploadedImgContainer.removeChild(imgElement);
+      uploadedImgContainer.removeChild(deleteButton);
+
+      uploadImgButton.value = "";
+      uploadImgButton.removeEventListener("change", uploadImg);
+      uploadImgButton.addEventListener("change", uploadImg);
+    });
+
+    uploadedImgContainer.appendChild(imgElement);
+    uploadedImgContainer.appendChild(deleteButton);
   }
 }
+
+function displayAddProductFrom() {
+  removeSuccessMess();
+
+  removeActiveTab();
+
+  $("#tab-3").addClass("active").hide().fadeIn(1000);
+}
+
+function removeSuccessMess() {
+  const successMessageContainer = document.querySelector(
+    ".success-message-container"
+  );
+  successMessageContainer.style.display = "none";
+}
+
+function removeActiveTab() {
+  AllTabs.forEach((tab) => {
+    tab.classList.remove("active");
+  });
+}
+
+fetchProducts();

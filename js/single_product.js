@@ -1,11 +1,9 @@
-let products = JSON.parse(localStorage.getItem("products"));
+let products = JSON.parse(localStorage.getItem("mainProducts"));
 let productId = parseInt(localStorage.getItem("productId"));
 let productDetails = products.find((item) => item.id === productId);
 let productContainer = document.querySelector(".product .card");
 
-console.log(products);
-console.log(productId);
-console.log(productDetails);
+// console.log(products);
 
 productContainer.innerHTML = `
     <div class="row g-0">
@@ -21,12 +19,7 @@ productContainer.innerHTML = `
         <h5 class="card-title">${productDetails.title}</h5>
         <div class="reviews">
             <div class='icons'>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
+                ${prodcutRating(productDetails.rating.rate)}
             </div>
             <span>${productDetails.rating.rate}</span>
         </div>

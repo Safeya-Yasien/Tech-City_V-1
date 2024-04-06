@@ -21,47 +21,42 @@ function changeLandingBackground() {
   setTimeout(() => changeLandingBackground(), 3000);
 }
 
-function displayData(data) {
+function displayData(apiData) {
   const productsContent = document.querySelector(".products-content");
 
   let html = "";
 
-  data.forEach((product) => {
+  for (let i = 0; i < apiData.length; i++) {
     html += `
       <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
-        <div class="box" onclick="openProductPage('${product.id}')">
+        <div class="box" onclick="openProductPage('${apiData[i].id}')">
           <div class="product-header">
-            <h2>${product.title}</h2>
-            <p>${product.description} </p>
+            <h2>${apiData[i].title}</h2>
+            <p>${apiData[i].description} </p>
           </div>
 
           <div class="product-img">
-              <img src="${product.image}" alt='product'/>
+              <img src="${apiData[i].image}" alt='product'/>
           </div>
 
           <div class="product-footer">
           <div class="reviews">
             <div class='icons'>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
+              ${prodcutRating(apiData[i].rating.rate)}
             </div>
-            <span>${product.rating.rate}</span>
+            <span>${apiData[i].rating.rate}</span>
           </div>
 
             <div class="product-price">
-              <p>${product.price}$</p>
+              <p>${apiData[i].price}$</p>
               <i class="fa-solid fa-cart-shopping"></i>
             </div>
-
+            
           </div>
         </div>
       </div>
     `;
-  });
+  }
 
   productsContent.innerHTML = `<div class="row">${html}</div>`;
 }
@@ -70,7 +65,7 @@ changeLandingBackground();
 fetchData().then(displayData);
 
 function openProductPage(productId) {
-  // window.location.href = `single_product.html?id=${productId}`;
+  window.location.href = `single_product.html?id=${productId}`;
   localStorage.setItem("productId", productId);
   window.location.href = "single_product.html";
 }
