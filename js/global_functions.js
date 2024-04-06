@@ -15,7 +15,6 @@ fetchData().then((data) =>
 const navLink = document.querySelectorAll(".nav-link");
 navLink.forEach((link) => {
   link.addEventListener("click", (e) => {
-    e.preventDefault();
     navLink.forEach((item) => {
       item.classList.remove("active");
     });
