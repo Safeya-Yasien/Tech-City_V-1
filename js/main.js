@@ -51,7 +51,7 @@ function displayData(apiData) {
               <p>${apiData[i].price}$</p>
               <i class="fa-solid fa-cart-shopping"></i>
             </div>
-            
+
           </div>
         </div>
       </div>
