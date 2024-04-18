@@ -43,6 +43,7 @@ function addProduct() {
     category: productCategory.value.trim().toLowerCase(),
     image: imgSrc,
     price: productPrice.value.trim(),
+    timestamp: new Date(),
   };
 
   if (
@@ -110,6 +111,7 @@ function uploadImg(event) {
   }
 }
 
+// if product created successfully
 function displaySuccessMessage(message) {
   const successMessageCotainer = document.querySelector(
     ".success-message-container"
@@ -119,6 +121,8 @@ function displaySuccessMessage(message) {
   successMessage.innerHTML = message;
   successMessageCotainer.style.display = "block";
 
+  // productsPageLink.href='#tab-2'
+
   productsPageLink.addEventListener("click", redirectToProductsPage);
 }
 
@@ -127,12 +131,13 @@ function redirectToProductsPage() {
   const tabTwo = document.querySelector("#tab-2");
 
   AllTabs.forEach((tab) => {
+    console.log(tab);
     tab.classList.remove("active");
   });
 
-  tabTwo.classList.add("active");
+  // tabTwo.classList.add("active");
 
-  location.reload();
+  $(tabTwo).hide().fadeIn(1000);
 }
 
 checkProductInLocalStorage();

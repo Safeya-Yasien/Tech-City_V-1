@@ -10,12 +10,16 @@ async function fetchProducts() {
   const response = await fetch(api);
   const apiData = await response.json();
 
+  console.log(apiData);
+
   const localStorageData = JSON.parse(localStorage.getItem("product")) || [];
   const mergedData = localStorageData.concat(apiData);
   displayProducts(mergedData);
 }
 
 function displayProducts(apiData) {
+  console.log(apiData);
+
   const tbody = document.querySelector("#tab-2 .products-table table tbody");
   tbody.innerHTML = "";
 
@@ -30,9 +34,7 @@ function displayProducts(apiData) {
         </div>
     </td>
     <td>
-        <a class="product-img" href="#">
-        <img src="${apiData[i].image}" alt='product'/>
-        </a>
+        <img src='' alt=''>
     </td>
     <td>
         <a class="product-name" href="#">
@@ -41,7 +43,7 @@ function displayProducts(apiData) {
     </td>
     <td class='product-price-update'>${apiData[i].price}</td>
     <td class='product-category-update'>${apiData[i].category}</td>
-    <td>Nov 12, 10:45 PM</td>
+    <td>${formatDate(apiData[i].created_at)}</td>
     <td class='position-relative'>
         <a
         href="#"
@@ -75,15 +77,25 @@ function displayProducts(apiData) {
   }
 }
 
-function removeProduct(index) {
-  event.preventDefault();
-  const localStorageData = JSON.parse(localStorage.getItem("product")) || [];
+function formatDate(date) {
 
-  localStorageData.splice(index, 1);
+  if (date instanceof Date){
+    return date
+  }
 
-  localStorage.setItem("product", JSON.stringify(localStorageData));
+  const options = {
+    month: "short",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: "true",
+  };
 
-  fetchProducts();
+  console.log(date);
+
+  const createdProductDate = new Date(date).toLocaleString("en-US", options);
+
+  return createdProductDate;
 }
 
 function updateProduct(index) {
@@ -124,6 +136,14 @@ function updateProduct(index) {
     uploadedImgContainer.appendChild(imgElement);
     uploadedImgContainer.appendChild(deleteButton);
   }
+}
+
+function removeProduct(index) {
+  products.splice(index, 1);
+
+  localStorage.setItem("product", JSON.stringify(products));
+
+  fetchProducts();
 }
 
 function displayAddProductFrom() {

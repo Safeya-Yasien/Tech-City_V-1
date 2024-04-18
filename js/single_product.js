@@ -1,28 +1,18 @@
-let products = JSON.parse(localStorage.getItem("mainProducts"));
-let productId = parseInt(localStorage.getItem("productId"));
-let productDetails = products.find((item) => item.id === productId);
-let productContainer = document.querySelector(".product .card");
+const urlParams = new URLSearchParams(window.location.search);
+const productString = urlParams.get("product");
+const productDetails = JSON.parse(productString);
 
-// console.log(products);
+let productContainer = document.querySelector(".product .card");
 
 productContainer.innerHTML = `
     <div class="row g-0">
     <div class="col-md-6">
-    <img
-        src="${productDetails.image}"
-        class="img-fluid rounded-start"
-        alt="phone"
-    />
+    
     </div>
     <div class="col-md-6 product-info">
     <div class="card-body">
-        <h5 class="card-title">${productDetails.title}</h5>
-        <div class="reviews">
-            <div class='icons'>
-                ${prodcutRating(productDetails.rating.rate)}
-            </div>
-            <span>${productDetails.rating.rate}</span>
-        </div>
+        <h5 class="card-title">${productDetails.name}</h5>
+        
         <p class="card-text">
         ${productDetails.description}
         </p>
