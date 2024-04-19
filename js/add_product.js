@@ -1,4 +1,4 @@
-const productTitle = document.querySelector("#product-title"),
+const productName = document.querySelector("#product-title"),
   productDescription = document.querySelector("#product-description"),
   productCategory = document.querySelector("#product-category"),
   productPrice = document.querySelector("#product-price"),
@@ -22,7 +22,7 @@ function checkProductInLocalStorage() {
 
 function addProduct() {
   if (
-    productTitle.value === "" ||
+    productName.value === "" ||
     productPrice.value === "" ||
     productCategory.value === "" ||
     !uploadedImgContainer.querySelector("img")
@@ -36,25 +36,35 @@ function addProduct() {
   }
 
   let newProduct = {
-    title: productTitle.value.trim().toLowerCase(),
+    name: productName.value.trim().toLowerCase(),
     description: productDescription.value.trim()
       ? productDescription.value.toLowerCase()
       : "No description provided",
     category: productCategory.value.trim().toLowerCase(),
     image: imgSrc,
     price: productPrice.value.trim(),
-    timestamp: new Date(),
+    timestamp: formatDate(new Date().toString()),
   };
 
   if (
-    productTitle.value !== "" &&
+    productName.value !== "" &&
     productPrice.value !== "" &&
     productCategory.value !== "" &&
     imgSrc
   ) {
-    publishProductButton.innerHTML = "Publish Product";
-    products.push(newProduct);
-    displaySuccessMessage("Product Added Successfully");
+    if (mood === "create") {
+      publishProductButton.innerHTML = "Publish Product";
+      products.push(newProduct);
+
+      displaySuccessMessage("Product Added Successfully");
+    } else if (mood === "update") {
+      console.log("update");
+      products[temp] = newProduct;
+      publishProductButton.innerHTML = "Publish Product";
+
+      displaySuccessMessage("Product Updated Successfully");
+      mood = "create";
+    }
 
     clearData();
   }
@@ -63,7 +73,7 @@ function addProduct() {
 }
 
 function clearData() {
-  productTitle.value = "";
+  productName.value = "";
   productDescription.value = "";
   productCategory.value = "";
   productPrice.value = "";

@@ -38,7 +38,7 @@ function displayProducts(apiData) {
     </td>
     <td>
         <a class="product-name" href="#">
-        ${apiData[i].title}
+        ${apiData[i].name}
         </a>
     </td>
     <td class='product-price-update'>${apiData[i].price}</td>
@@ -78,9 +78,8 @@ function displayProducts(apiData) {
 }
 
 function formatDate(date) {
-
-  if (date instanceof Date){
-    return date
+  if (date instanceof Date) {
+    return date;
   }
 
   const options = {
@@ -108,7 +107,7 @@ function updateProduct(index) {
 
   $("#tab-3").addClass("active").hide().fadeIn(1000);
 
-  productTitle.value = products[index].title;
+  productName.value = products[index].name;
   productDescription.value = products[index].description;
   productCategory.value = products[index].category;
   productPrice.value = products[index].price;
@@ -136,6 +135,8 @@ function updateProduct(index) {
     uploadedImgContainer.appendChild(imgElement);
     uploadedImgContainer.appendChild(deleteButton);
   }
+
+  temp = index;
 }
 
 function removeProduct(index) {
