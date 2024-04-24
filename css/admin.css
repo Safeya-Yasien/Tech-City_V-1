@@ -257,6 +257,7 @@ header .user-img img {
   border-top: 1px solid var(--icons-color);
   padding: 0px 20px;
   overflow-x: auto;
+  width: 100%;
 }
 
 .body-content .tabs #tab-2 .body .products-table th {
