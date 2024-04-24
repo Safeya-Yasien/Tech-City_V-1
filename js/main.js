@@ -24,7 +24,7 @@ function changeLandingBackground() {
 // display products
 async function displayData() {
   const apiData = await fetchData();
-  console.log(apiData)
+  // console.log(apiData)
   const productsContent = document.querySelector(".products-content");
 
   let html = "";

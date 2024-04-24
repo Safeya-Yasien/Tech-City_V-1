@@ -1,81 +1,129 @@
 const productName = document.querySelector("#product-title"),
   productDescription = document.querySelector("#product-description"),
-  productCategory = document.querySelector("#product-category"),
   productPrice = document.querySelector("#product-price"),
   publishProductButton = document.querySelector("#publish-product-button"),
   discardProductButton = document.querySelector("#discard-product-button"),
   uploadImgButton = document.querySelector("#file"),
   uploadedImgContainer = document.querySelector(".uploaded-img");
-let products;
-let mood = "create";
 publishProductButton.addEventListener("click", addProduct);
 discardProductButton.addEventListener("click", clearData);
 uploadImgButton.addEventListener("change", uploadImg);
 
-function checkProductInLocalStorage() {
-  if (localStorage.getItem("product") !== null) {
-    products = JSON.parse(localStorage.getItem("product"));
-  } else {
-    products = [];
-  }
-}
+// add product
+// async function addProduct() {
+//   if (
+//     productName.value === "" ||
+//     productPrice.value === ""
+//     // !uploadedImgContainer.querySelector("img")
+//   ) {
+//     return;
+//   }
 
-function addProduct() {
+//   // let imgSrc = null;
+//   // const uploadedImage = uploadedImgContainer.querySelector("img");
+//   // if (uploadedImage) {
+//   //   imgSrc = uploadedImage.src;
+//   // }
+
+//   let newProduct = {
+//     name: productName.value.trim().toLowerCase(),
+//     description: productDescription.value.trim()
+//       ? productDescription.value.toLowerCase()
+//       : "No description provided",
+//     // image: imgSrc,
+//     price: productPrice.value.trim(),
+//   };
+
+//   try {
+//     const response = await fetch(api, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(newProduct),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Faild to add product.");
+//     }
+
+//     if (
+//       productName.value !== "" &&
+//       productPrice.value !== ""
+//       // imgSrc
+//     ) {
+//       publishProductButton.innerHTML = "Publish Product";
+//       displaySuccessMessage("Product Added Successfully");
+//     }
+
+//     clearData();
+//   } catch (error) {
+//     console.log("Error: ", error.message);
+//   }
+// }
+
+async function addProduct() {
   if (
     productName.value === "" ||
-    productPrice.value === "" ||
-    productCategory.value === "" ||
-    !uploadedImgContainer.querySelector("img")
-  )
+    productPrice.value === ""
+    // !uploadedImgContainer.querySelector("img")
+  ) {
     return;
-
-  let imgSrc = null;
-  const uploadedImage = uploadedImgContainer.querySelector("img");
-  if (uploadedImage) {
-    imgSrc = uploadedImage.src;
   }
+
+  // let imgSrc = null;
+  // const uploadedImage = uploadedImgContainer.querySelector("img");
+  // if (uploadedImage) {
+  //   imgSrc = uploadedImage.src;
+  // }
 
   let newProduct = {
     name: productName.value.trim().toLowerCase(),
     description: productDescription.value.trim()
       ? productDescription.value.toLowerCase()
       : "No description provided",
-    category: productCategory.value.trim().toLowerCase(),
-    image: imgSrc,
+    // image: imgSrc,
     price: productPrice.value.trim(),
-    timestamp: formatDate(new Date().toString()),
   };
 
-  if (
-    productName.value !== "" &&
-    productPrice.value !== "" &&
-    productCategory.value !== "" &&
-    imgSrc
-  ) {
-    if (mood === "create") {
-      publishProductButton.innerHTML = "Publish Product";
-      products.push(newProduct);
+  try {
+    let requestMethod = "POST";
 
-      displaySuccessMessage("Product Added Successfully");
-    } else if (mood === "update") {
-      console.log("update");
-      products[temp] = newProduct;
-      publishProductButton.innerHTML = "Publish Product";
-
-      displaySuccessMessage("Product Updated Successfully");
-      mood = "create";
+    if (publishProductButton.innerHTML === "Update Product") {
+      requestMethod = "PUT";
     }
 
-    clearData();
-  }
+    const response = await fetch(api, {
+      method: requestMethod,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    });
+    console.log(response);
 
-  localStorage.setItem("product", JSON.stringify(products));
+    if (!response.ok) {
+      throw new Error("Faild to add/update product.");
+    }
+
+    if (publishProductButton.innerHTML === "Update Product") {
+      displaySuccessMessage("Product Updated Successfully");
+    } else {
+      publishProductButton.innerHTML === "Publish Product";
+      displaySuccessMessage("Product Added Successfully");
+    }
+
+    publishProductButton.innerHTML = "Publish Product";
+
+    clearData();
+  } catch (error) {
+    console.log("Error: ", error.message);
+  }
 }
 
 function clearData() {
   productName.value = "";
   productDescription.value = "";
-  productCategory.value = "";
   productPrice.value = "";
 
   const uploadedImage = uploadedImgContainer.querySelector("img");
@@ -131,8 +179,6 @@ function displaySuccessMessage(message) {
   successMessage.innerHTML = message;
   successMessageCotainer.style.display = "block";
 
-  // productsPageLink.href='#tab-2'
-
   productsPageLink.addEventListener("click", redirectToProductsPage);
 }
 
@@ -140,14 +186,11 @@ function redirectToProductsPage() {
   const AllTabs = document.querySelectorAll(".tab");
   const tabTwo = document.querySelector("#tab-2");
 
+  fetchProducts();
+
   AllTabs.forEach((tab) => {
-    console.log(tab);
     tab.classList.remove("active");
   });
 
-  // tabTwo.classList.add("active");
-
   $(tabTwo).hide().fadeIn(1000);
 }
-
-checkProductInLocalStorage();
